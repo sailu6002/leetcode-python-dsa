@@ -1,0 +1,24 @@
+class Solution:
+    def stringIndices(self, wordsContainer: List[str], wordsQuery: List[str]) -> List[int]:
+        trie = {"": 0}
+        for i, w in enumerate(wordsContainer):
+            l = len(w)
+            if l < len(wordsContainer[trie[""]]):
+                trie[""] = i
+            curr_node = trie
+            for c in w[::-1]:
+                if c not in curr_node:
+                    curr_node[c] = {"": i}
+                elif l < len(wordsContainer[curr_node[c][""]]):
+                    curr_node[c][""] = i                    
+                curr_node = curr_node[c]
+
+        ans = []
+        for q in wordsQuery:
+            curr_node = trie
+            for c in q[::-1]:
+                if c not in curr_node:
+                    break
+                curr_node = curr_node[c]
+            ans.append(curr_node[""])
+        return ans
